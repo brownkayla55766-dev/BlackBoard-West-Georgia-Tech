@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Course Portal</title>
+<style>
+:root {
+  --navy:#152638;
+  --sidebar:#172735;
+  --blue:#1769aa;
+  --bg:#f3f6fa;
+  --text:#203246;
+  --muted:#66788a;
+  --line:#dce4ec;
+}
+*{box-sizing:border-box}
+body{margin:0;font:15px Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+header{height:82px;background:var(--navy);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 25px;gap:15px}
+.brand{font-size:20px;font-weight:bold;letter-spacing:.3px}
+.brand small{display:block;font-size:12px;font-weight:normal;color:#cbd8e5;margin-top:5px}
+.header-right{display:flex;align-items:center;gap:16px}
+.layout{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:calc(100vh - 82px)}
+nav{background:var(--sidebar);padding:20px 12px;color:white}
+nav button{display:block;width:100%;padding:14px 15px;text-align:left;border:0;border-radius:6px;background:transparent;color:#e8eef4;margin-bottom:5px}
+nav button:hover,nav button.active{background:var(--blue)}
+main{padding:27px;max-width:1500px;width:100%;margin:auto}
+h1{font-size:30px;margin:4px 0 8px}
+h2{font-size:21px;margin:0 0 15px}
+h3{font-size:17px;margin:0 0 7px}
+.muted{color:var(--muted)}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:bold}
+.panel,.stat,.course{background:white;border:1px solid var(--line);border-radius:11px}
+.panel{padding:20px;margin-bottom:17px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:20px 0}
+.stat{padding:17px}.stat strong{display:block;font-size:25px;margin-top:7px}
+.course-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.course{padding:18px;text-align:left;color:inherit;width:100%;transition:border-color .15s}
+.course:hover{border-color:#82afd5}
+.course-top{display:flex;justify-content:space-between;gap:12px}
+.grade{font-size:25px;font-weight:bold;color:var(--blue);white-space:nowrap}
+.bar{height:8px;background:#e8edf3;border-radius:8px;overflow:hidden;margin:13px 0 9px}
+.bar span{display:block;height:100%;background:var(--blue)}
+.pill{display:inline-block;padding:5px 9px;border-radius:20px;background:#edf4fb;color:#245a83;font-size:12px}
+.columns{display:grid;grid-template-columns:minmax(0,2fr) minmax(280px,1fr);gap:17px;margin-top:18px}
+.todo-item{padding:14px 0;border-bottom:1px solid #e6ebf1;display:flex;gap:12px;align-items:center}
+.todo-item:last-child{border-bottom:0}
+.circle{width:30px;height:30px;border:2px solid #9aabbc;border-radius:50%;flex-shrink:0}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.action{border:1px solid #cbd6e1;border-radius:7px;padding:10px 13px;background:white;color:var(--text)}
+.primary{background:var(--blue);border-color:var(--blue);color:white}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}
+select,input[type=number],input[type=text],input[type=password],input[type=email]{padding:11px;border:1px solid #cbd6e1;border-radius:7px;background:white;max-width:100%}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:9px;background:white}
+table{border-collapse:collapse;width:100%;min-width:570px}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid #e5ebf1}
+th{font-size:12px;color:var(--muted);background:#f8fafc;text-transform:uppercase}
+td input{width:85px}
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
+.login-card{width:100%;max-width:420px;background:white;border:1px solid var(--line);border-radius:13px;overflow:hidden;box-shadow:0 12px 35px #172b3c12}
+.login-head{background:var(--navy);color:white;padding:27px}
+.login-head h1{font-size:24px;margin:0 0 8px}
+.login-head p{margin:0;color:#cbd8e5}
+.login-body{padding:28px}
+.field{display:block;margin-bottom:17px}
+.field span{display:block;font-weight:bold;font-size:14px;margin-bottom:7px}
+.field input{width:100%;font-size:16px}
+.login-body button{width:100%;padding:13px}
+.footer{font-size:12px;color:var(--muted);margin-top:22px}
+@media(max-width:900px){
+ .layout{grid-template-columns:1fr}
+ nav{display:flex;overflow-x:auto;padding:8px}
+ nav button{min-width:max-content;width:auto;margin:0 3px;padding:12px}
+ .columns{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+ header{height:auto;min-height:75px;padding:15px;align-items:flex-start}
+ .brand{font-size:17px}
+ .header-right{font-size:13px}
+ main{padding:16px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .stat{padding:13px}
+ .stat strong{font-size:22px}
+ .course-grid{grid-template-columns:1fr}
+ h1{font-size:25px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<section id="loginPage" class="login-wrap">
+  <div class="login-card">
+    <div class="login-head">
+      <h1>My Course Portal</h1>
+      <p>Sign in to view your courses</p>
+    </div>
+    <div class="login-body">
+      <form id="loginForm">
+        <label class="field">
+          <span>Email address</span>
+          <input id="email" type="email" autocomplete="username" required placeholder="you@example.com">
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input id="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="action primary" type="submit">Sign in</button>
+        <p id="loginMessage" class="muted" role="status"></p>
+      </form>
+      <div class="footer">Secure sign-in must be connected before publishing.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTAL AND COURSE WEBSITE -->
+<div id="portal" class="hidden">
+  <header>
+    <div class="brand">MY COURSE PORTAL<small>Student Learning Space</small></div>
+    <div class="header-right">
+      <span id="welcome">My Courses</span>
+      <button class="action" id="signOut">Sign out</button>
+    </div>
+  </header>
+  <div class="layout">
+    <nav>
+      <button class="active" data-page="home">⌂ &nbsp; Home</button>
+      <button data-page="courses">▤ &nbsp; Courses</button>
+      <button data-page="organizations">♧ &nbsp; Organizations</button>
+      <button data-page="calendar">▦ &nbsp; Calendar</button>
+      <button data-page="messages">✉ &nbsp; Messages</button>
+      <button data-page="grades">▧ &nbsp; Grades</button>
+      <button data-page="tools">⚙ &nbsp; Tools</button>
+    </nav>
+    <main>
+      <section id="home">
+        <div class="eyebrow">Home</div>
+        <h1>Course Overview</h1>
+        <div class="muted">Your courses, grades, and coursework tracker.</div>
+        <div class="stats">
+          <div class="stat"><span class="muted">Courses</span><strong>4</strong></div>
+          <div class="stat"><span class="muted">Items per course</span><strong>20</strong></div>
+          <div class="stat"><span class="muted">Assignments + Notes</span><strong>80</strong></div>
+          <div class="stat"><span class="muted">Grade average</span><strong>88.80%</strong></div>
+        </div>
+        <div class="columns">
+          <div>
+            <h2>My Courses</h2>
+            <div id="homeCourses" class="course-grid"></div>
+          </div>
+          <aside>
+            <div class="panel">
+              <h2>To Do</h2>
+              <div class="todo-item"><span class="circle"></span><div>Unit assignments<div class="muted">View coursework</div></div></div>
+              <div class="todo-item"><span class="circle"></span><div>Unit notes<div class="muted">Review course notes</div></div></div>
+              <button class="action" data-go="assignments">Open coursework</button>
+            </div>
+            <div class="panel">
+              <h2>Grade Summary</h2>
+              <p class="muted">Simple average across four courses</p>
+              <strong style="font-size:28px">88.80%</strong>
+            </div>
+            <div class="panel">
+              <h2>Quick Links</h2>
+              <p><button class="action" data-go="grades">View Grades</button></p>
+              <p><button class="action" data-go="calendar">Calendar</button></p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="courses" class="hidden">
+        <div class="eyebrow">Learning space</div><h1>My Courses</h1>
+        <p class="muted">Select a course to open its assignment list.</p>
+        <div id="allCourses" class="course-grid"></div>
+      </section>
+
+      <section id="grades" class="hidden">
+        <div class="eyebrow">Course progress</div><h1>Grades</h1>
+        <p class="muted">Current overall percentages provided for your courses.</p>
+        <div id="gradeList" class="panel"></div>
+      </section>
+
+      <section id="assignments" class="hidden">
+        <div class="eyebrow">Coursework</div><h1 id="assignmentHeading">Assignments & Notes</h1>
+        <p class="muted">Enter actual scores and point values to calculate item percentages.</p>
+        <div class="toolbar">
+          <select id="courseSelect" aria-label="Choose course"></select>
+          <select id="typeSelect" aria-label="Filter items">
+            <option value="all">All items</option>
+            <option value="Assignment">Assignments</option>
+            <option value="Notes">Notes</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Item</th><th>Score</th><th>Out of</th><th>Percentage</th><th>Result</th></tr></thead>
+            <tbody id="itemRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="organizations" class="hidden">
+        <div class="eyebrow">Community</div><h1>Organizations</h1>
+        <div class="panel">Your organizations and study groups can be listed here.</div>
+      </section>
+      <section id="calendar" class="hidden">
+        <div class="eyebrow">Schedule</div><h1>Calendar</h1>
+        <div class="panel">Add your assignment due dates and study sessions here.</div>
+      </section>
+      <section id="messages" class="hidden">
+        <div class="eyebrow">Communication</div><h1>Messages</h1>
+        <div class="panel">Your personal course messages can be organized here.</div>
+      </section>
+      <section id="tools" class="hidden">
+        <div class="eyebrow">Resources</div><h1>Tools</h1>
+        <div class="panel">Add your course resources and useful links here.</div>
+      </section>
+      <div class="footer">My Course Portal · Personal course organizer</div>
+    </main>
+  </div>
+</div>
+
+<script>
+const courses=[
+ {code:"ENGL 1101",name:"English Composition I",grade:82.85},
+ {code:"MATH 1111",name:"College Algebra",grade:92.22},
+ {code:"PSYC 2013",name:"Psychology",grade:95.02},
+ {code:"POLS 1101",name:"American Government",grade:85.12}
+];
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
+
+let items=courses.flatMap(c=>Array.from({length:20},(_,i)=>({
+ id:c.code+"-"+i,course:c.code,
+ type:i%2===0?"Assignment":"Notes",
+ unit:Math.floor(i/2)+1,score:"",outOf:100
+})));
+
+function courseCard(c){
+ return `<button class="course" data-open="${esc(c.code)}">
+ <div class="course-top"><div><h3>${esc(c.code)}</h3>
+ <div class="muted">${esc(c.name)}</div></div>
+ <div class="grade">${c.grade.toFixed(2)}%</div></div>
+ <div class="bar"><span style="width:${c.grade}%"></span></div>
+ <div class="row"><span class="pill">Current overall grade</span><span class="muted">View course →</span></div>
+ </button>`;
+}
+
+function renderCourses(){
+ $("homeCourses").innerHTML=courses.map(courseCard).join("");
+ $("allCourses").innerHTML=courses.map(courseCard).join("");
+ document.querySelectorAll("[data-open]").forEach(b=>{
+   b.addEventListener("click",()=>{
+     $("courseSelect").value=b.dataset.open;
+     showPage("assignments");
+     renderItems();
+   });
+ });
+}
+
+function renderGrades(){
+ $("gradeList").innerHTML=courses.map(c=>`
+ <div style="padding:13px 0;border-bottom:1px solid #e4eaf0">
+ <div class="row"><div><b>${esc(c.code)}</b><div class="muted">${esc(c.name)}</div></div>
+ <strong class="grade">${c.grade.toFixed(2)}%</strong></div>
+ <div class="bar"><span style="width:${c.grade}%"></span></div></div>`).join("");
+}
+
+function renderItems(){
+ const code=$("courseSelect").value;
+ const filter=$("typeSelect").value;
+ const list=items.filter(x=>x.course===code&&(filter==="all"||x.type===filter));
+ $("assignmentHeading").textContent=code+" — Assignments & Notes";
+ $("itemRows").innerHTML=list.map(x=>{
+   const percent=x.score!==""&&Number(x.outOf)>0
+     ?Number(x.score)/Number(x.outOf)*100:null;
+   let range=percent===null?"Not entered":
+     percent>=90?"A range":percent>=80?"B range":
+     percent>=70?"C range":percent>=60?"D range":"Below 60%";
+   return `<tr>
+   <td><b>Unit ${x.unit} ${x.type}</b></td>
+   <td><input aria-label="Score" type="number" min="0" step="any" data-id="${esc(x.id)}" data-field="score" value="${esc(x.score)}" placeholder="—"></td>
+   <td><input aria-label="Points possible" type="number" min=".01" step="any" data-id="${esc(x.id)}" data-field="outOf" value="${esc(x.outOf)}"></td>
+   <td>${percent===null?"—":percent.toFixed(2)+"%"}</td>
+   <td><span class="pill">${range}</span></td></tr>`;
+ }).join("");
+
+ $("itemRows").querySelectorAll("input").forEach(input=>{
+   input.addEventListener("change",()=>{
+     const item=items.find(x=>x.id===input.dataset.id);
+     if(!item)return;
+     item[input.dataset.field]=input.value;
+     renderItems();
+   });
+ });
+}
+
+function showPage(page){
+ document.querySelectorAll("main section").forEach(s=>
+   s.classList.toggle("hidden",s.id!==page));
+ document.querySelectorAll("nav button[data-page]").forEach(b=>
+   b.classList.toggle("active",b.dataset.page===page));
+ if(page==="grades")renderGrades();
+ if(page==="assignments")renderItems();
+}
+
+document.querySelectorAll("nav button[data-page]").forEach(b=>
+ b.addEventListener("click",()=>showPage(b.dataset.page)));
+
+document.querySelectorAll("[data-go]").forEach(b=>
+ b.addEventListener("click",()=>showPage(b.dataset.go)));
+
+$("courseSelect").innerHTML=courses.map(c=>
+ `<option value="${esc(c.code)}">${esc(c.code)} — ${esc(c.name)}</option>`
+).join("");
+$("courseSelect").addEventListener("change",renderItems);
+$("typeSelect").addEventListener("change",renderItems);
+
+/*
+  Authentication is intentionally not simulated here.
+  Connect a real authentication provider before publishing.
+  Do not store passwords in this file or in localStorage.
+*/
+$("loginForm").addEventListener("submit",event=>{
+ event.preventDefault();
+ $("loginMessage").textContent=
+   "Secure authentication must be configured before sign-in can continue.";
+});
+
+$("signOut").addEventListener("click",()=>{
+ $("portal").classList.add("hidden");
+ $("loginPage").classList.remove("hidden");
+ $("loginForm").reset();
+ $("loginMessage").textContent="";
+});
+
+renderCourses();
+renderGrades();
+renderItems();
+</script>
+</body>
+</html>
